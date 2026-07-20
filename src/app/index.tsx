@@ -1,98 +1,100 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
+/**
+ * Onboarding, screen 1 — Welcome.
+ *
+ * Deliberately restrained: no illustration, no icon, no onboarding
+ * carousel. Every extra element here is one more thing standing between a
+ * person and the panic button. The whitespace is the design — it signals
+ * "calm" before the app has said a single word.
+ *
+ * Light mode is the default across EVA, not just here, because dark UIs in
+ * a high-stress moment tend to read as heavier and more closed-in. Generous
+ * negative space on a warm, light background produces a calmer first
+ * response than a dark, dense one would.
+ *
+ * On mount this screen checks whether onboarding was already completed
+ * (i.e. trusted contacts exist) and, if so, skips straight to Home — this
+ * screen only appears once, on first install.
+ */
+import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { PrimaryButton } from '@/components/PrimaryButton';
+import { Spacing } from '@/constants/spacing';
+import { Typography } from '@/constants/typography';
+import { useAppTheme } from '@/utils/colorSystem';
+import { hasCompletedOnboarding } from '@/utils/storage';
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
+export default function WelcomeScreen() {
+  const router = useRouter();
+  const { colors } = useAppTheme();
+  const [isChecking, setIsChecking] = useState(true);
+
+  useEffect(() => {
+    hasCompletedOnboarding().then((completed) => {
+      if (completed) {
+        router.replace('/home');
+      } else {
+        setIsChecking(false);
+      }
+    });
+  }, [router]);
+
+  if (isChecking) {
+    return <View style={[styles.container, { backgroundColor: colors.background }]} />;
   }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={styles.content}>
+        <Text style={[styles.wordmark, { color: colors.primary }]}>EVA</Text>
 
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+        <View style={styles.copy}>
+          <Text style={[Typography.heading, styles.headline, { color: colors.textPrimary }]}>
+            Protection, one tap away.
+          </Text>
+          <Text style={[Typography.body, styles.subtext, { color: colors.textSecondary }]}>
+            EVA stays with you. Quietly, quickly, always ready.
+          </Text>
+        </View>
+      </View>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
-
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+      <View style={styles.footer}>
+        <PrimaryButton label="Get started" onPress={() => router.push('/onboarding-contacts')} />
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
   },
-  safeArea: {
+  content: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    paddingHorizontal: Spacing.xl,
+    gap: Spacing.xxl,
   },
-  title: {
+  wordmark: {
+    fontSize: 20,
+    fontWeight: '600',
+    letterSpacing: 2,
+  },
+  copy: {
+    alignItems: 'center',
+    gap: Spacing.md,
+  },
+  headline: {
     textAlign: 'center',
   },
-  code: {
-    textTransform: 'uppercase',
+  subtext: {
+    textAlign: 'center',
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  footer: {
+    paddingHorizontal: Spacing.xl,
+    paddingBottom: Spacing.xl,
   },
 });
