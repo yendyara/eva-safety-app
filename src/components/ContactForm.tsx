@@ -12,9 +12,7 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { MIN_TAP_TARGET, Spacing } from '@/constants/spacing';
 import { Typography } from '@/constants/typography';
 import { useAppTheme } from '@/utils/colorSystem';
-import { TrustedContact } from '@/utils/storage';
-
-const MAX_CONTACTS = 3;
+import { MAX_TRUSTED_CONTACTS, TrustedContact } from '@/utils/storage';
 
 type ContactFormProps = {
   contacts: TrustedContact[];
@@ -37,7 +35,7 @@ export function ContactForm({ contacts, onChange }: ContactFormProps) {
   };
 
   const addContact = () => {
-    if (contacts.length >= MAX_CONTACTS) return;
+    if (contacts.length >= MAX_TRUSTED_CONTACTS) return;
     onChange([...contacts, createEmptyContact()]);
   };
 
@@ -76,7 +74,7 @@ export function ContactForm({ contacts, onChange }: ContactFormProps) {
         </View>
       ))}
 
-      {contacts.length < MAX_CONTACTS && (
+      {contacts.length < MAX_TRUSTED_CONTACTS && (
         <Text
           accessibilityRole="button"
           onPress={addContact}

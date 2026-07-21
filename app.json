@@ -8,7 +8,8 @@
     "scheme": "evasafetyapp",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "bundleIdentifier": "com.anonymous.evasafetyapp"
     },
     "android": {
       "adaptiveIcon": {
@@ -17,7 +18,14 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.READ_CONTACTS",
+        "android.permission.WRITE_CONTACTS"
+      ],
+      "package": "com.anonymous.evasafetyapp"
     },
     "web": {
       "output": "static",
@@ -37,6 +45,12 @@
         "expo-location",
         {
           "locationWhenInUsePermission": "EVA uses your location only when you send an alert, so your trusted contacts know where to find you."
+        }
+      ],
+      [
+        "expo-contacts",
+        {
+          "contactsPermission": "EVA reads your contacts only to help you pick trusted contacts — nothing ever leaves your device."
         }
       ]
     ],

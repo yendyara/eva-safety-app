@@ -15,26 +15,57 @@ export type TrustedContact = {
   phone: string;
 };
 
+/**
+ * A contact the person has explicitly said should never receive an alert.
+ * This exists alongside trusted contacts, not inside them — someone can be
+ * screened out before ever being added, so there's no "add then remove"
+ * step where a single missed tap could send them an alert.
+ */
+export type ExcludedContact = {
+  id: string;
+  name: string;
+  phone: string;
+};
+
 export type EmergencyRegion = 'EU' | 'US';
 export type CoordinateFormat = 'decimal' | 'dms';
 export type ThemeMode = 'system' | 'light' | 'dark';
+export type ActivationMethod = 'hold' | 'volume';
 
 export type AppSettings = {
   emergencyRegion: EmergencyRegion;
   coordinateFormat: CoordinateFormat;
   themeMode: ThemeMode;
+  activationMethod: ActivationMethod;
 };
 
 export const DEFAULT_SETTINGS: AppSettings = {
   emergencyRegion: 'EU',
   coordinateFormat: 'decimal',
   themeMode: 'system',
+  activationMethod: 'hold',
 };
+
+/** Trusted contacts are capped at 3 — see ContactForm for the reasoning. */
+export const MAX_TRUSTED_CONTACTS = 3;
 
 const KEYS = {
   contacts: 'eva:trustedContacts',
   settings: 'eva:settings',
+  excludedContacts: 'eva:excludedContacts',
+  onboardingComplete: 'eva:onboardingComplete',
 } as const;
+
+/**
+ * Excluded-contact matching is by phone number, not name — names can be
+ * edited or entered inconsistently, but a phone number is what an alert
+ * actually gets sent to. Comparing the last 10 digits means "+1 555 123
+ * 4567" and "(555) 123-4567" are recognized as the same number.
+ */
+export function normalizePhone(phone: string): string {
+  const digits = phone.replace(/\D/g, '');
+  return digits.slice(-10) || digits;
+}
 
 export async function getContacts(): Promise<TrustedContact[]> {
   const raw = await AsyncStorage.getItem(KEYS.contacts);
@@ -48,18 +79,63 @@ export async function getContacts(): Promise<TrustedContact[]> {
   }
 }
 
+/**
+ * Excluded numbers are stripped out here, at the single place all trusted
+ * contacts get written — every screen that saves contacts (onboarding, the
+ * contacts picker, Settings) goes through this function, so there's one
+ * place a screening block can't be bypassed by a new call site later.
+ */
 export async function saveContacts(contacts: TrustedContact[]): Promise<void> {
-  await AsyncStorage.setItem(KEYS.contacts, JSON.stringify(contacts));
+  const filtered = await filterExcludedContacts(contacts);
+  await AsyncStorage.setItem(KEYS.contacts, JSON.stringify(filtered));
+}
+
+export async function getExcludedContacts(): Promise<ExcludedContact[]> {
+  const raw = await AsyncStorage.getItem(KEYS.excludedContacts);
+  if (!raw) return [];
+  try {
+    return JSON.parse(raw) as ExcludedContact[];
+  } catch {
+    return [];
+  }
 }
 
 /**
- * Onboarding is considered complete once at least one trusted contact is
- * saved. That single check is what lets the welcome screen route returning
- * users straight to the panic button instead of re-running setup.
+ * Adds contacts to the permanent exclusion list and immediately purges any
+ * of them that are already saved as a trusted contact — blocking someone
+ * shouldn't leave them sitting in the trusted list until the next save.
  */
-export async function hasCompletedOnboarding(): Promise<boolean> {
-  const contacts = await getContacts();
-  return contacts.length > 0;
+export async function excludeContacts(newlyExcluded: ExcludedContact[]): Promise<void> {
+  if (newlyExcluded.length === 0) return;
+
+  const existing = await getExcludedContacts();
+  const existingPhones = new Set(existing.map((c) => normalizePhone(c.phone)));
+  const merged = [
+    ...existing,
+    ...newlyExcluded.filter((c) => !existingPhones.has(normalizePhone(c.phone))),
+  ];
+  await AsyncStorage.setItem(KEYS.excludedContacts, JSON.stringify(merged));
+
+  const currentTrusted = await getContacts();
+  await saveContacts(currentTrusted); // re-run through the exclusion filter to purge them now
+}
+
+export async function filterExcludedContacts<T extends { phone: string }>(
+  contacts: T[]
+): Promise<T[]> {
+  const excluded = await getExcludedContacts();
+  if (excluded.length === 0) return contacts;
+  const excludedPhones = new Set(excluded.map((c) => normalizePhone(c.phone)));
+  return contacts.filter((c) => !excludedPhones.has(normalizePhone(c.phone)));
+}
+
+export async function getOnboardingComplete(): Promise<boolean> {
+  const raw = await AsyncStorage.getItem(KEYS.onboardingComplete);
+  return raw === 'true';
+}
+
+export async function setOnboardingComplete(): Promise<void> {
+  await AsyncStorage.setItem(KEYS.onboardingComplete, 'true');
 }
 
 export async function getSettings(): Promise<AppSettings> {

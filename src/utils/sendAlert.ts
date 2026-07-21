@@ -19,7 +19,7 @@
 import * as SMS from 'expo-sms';
 
 import { Coordinates, toGoogleMapsLink } from '@/utils/getLocation';
-import { TrustedContact } from '@/utils/storage';
+import { TrustedContact, filterExcludedContacts } from '@/utils/storage';
 
 export type ComposerResult = 'sent' | 'cancelled' | 'unknown' | 'unavailable';
 
@@ -61,19 +61,26 @@ export async function sendHelpAlert(
   contacts: TrustedContact[],
   coords: Coordinates | null
 ): Promise<AlertResult> {
+  // Hard block, checked here regardless of what's already been filtered
+  // upstream: a contact can be excluded after being saved as trusted (e.g.
+  // a later re-scan flags someone who was added before screening caught
+  // them), so this is the last checkpoint before anything actually sends.
+  const safeContacts = await filterExcludedContacts(contacts);
+
   const timestamp = Date.now();
-  const composerResult = await sendComposedMessage(contacts, buildHelpMessage(coords));
+  const composerResult = await sendComposedMessage(safeContacts, buildHelpMessage(coords));
   const confirmed = composerResult === 'sent' || composerResult === 'unknown';
 
   return {
     composerResult,
     timestamp,
-    contacts: contacts.map((contact) => ({ ...contact, confirmed })),
+    contacts: safeContacts.map((contact) => ({ ...contact, confirmed })),
   };
 }
 
 export async function sendSafeCancellation(
   contacts: TrustedContact[]
 ): Promise<ComposerResult> {
-  return sendComposedMessage(contacts, SAFE_CANCELLATION_MESSAGE);
+  const safeContacts = await filterExcludedContacts(contacts);
+  return sendComposedMessage(safeContacts, SAFE_CANCELLATION_MESSAGE);
 }

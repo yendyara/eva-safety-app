@@ -1,18 +1,12 @@
 /**
- * Onboarding, step 3 of 5 — ask to set up trusted contacts.
+ * Onboarding, step 2 of 5 — explains the panic button before anyone has to
+ * rely on it under stress.
  *
- * This screen only asks; the actual picking happens on the contacts-picker
- * screen (import from the device, screened for likely partner/family
- * matches, with a manual-entry fallback if contacts permission is
- * denied). Keeping the ask and the picker separate means skipping this
- * step is a single tap, not an abandoned form.
- *
- * No sign-up, no account, nothing sent anywhere — contacts are written
- * straight to AsyncStorage on this device. An account is a record, and a
- * record is something that can be found. For someone whose safety depends
- * on an abuser not knowing this app exists, skipping account creation
- * isn't a convenience shortcut, it's the whole point: there is nothing to
- * discover outside the phone itself.
+ * The static circle mock here isn't decoration — the global design
+ * principle is "nothing decorative that doesn't serve the user," and
+ * showing the actual button (inert, no hold timer) so it's recognizable
+ * later is the one exception that earns its place: familiarity in the
+ * moment that matters is worth the one static shape.
  */
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
@@ -25,7 +19,9 @@ import { Typography } from '@/constants/typography';
 import { useAppTheme } from '@/utils/colorSystem';
 import { setOnboardingComplete } from '@/utils/storage';
 
-export default function OnboardingContactsAskScreen() {
+const PREVIEW_DIAMETER = 140;
+
+export default function OnboardingPanicButtonScreen() {
   const router = useRouter();
   const { colors } = useAppTheme();
 
@@ -39,27 +35,28 @@ export default function OnboardingContactsAskScreen() {
       <OnboardingHeader onBack={() => router.back()} onSkip={handleSkip} />
 
       <View style={styles.content}>
+        <View
+          style={[
+            styles.preview,
+            { backgroundColor: colors.primary },
+          ]}
+        >
+          <Text style={[styles.previewLabel, { color: colors.onPrimary }]}>Hold to activate</Text>
+        </View>
+
         <View style={styles.copy}>
           <Text style={[Typography.heading, styles.headline, { color: colors.textPrimary }]}>
-            Who should eva alert?
+            The panic button
           </Text>
           <Text style={[Typography.body, styles.subtext, { color: colors.textSecondary }]}>
-            Choose up to 3 trusted people. eva will alert them if you need
-            help. You can do this now or later from Settings.
+            Hold the button for 3 seconds to alert your trusted contacts and
+            share your location with them.
           </Text>
         </View>
       </View>
 
       <View style={styles.footer}>
-        <PrimaryButton
-          label="Choose contacts"
-          onPress={() =>
-            router.push({
-              pathname: '/contacts-picker',
-              params: { returnTo: '/onboarding-activation' },
-            })
-          }
-        />
+        <PrimaryButton label="Continue" onPress={() => router.push('/onboarding-contacts')} />
       </View>
     </SafeAreaView>
   );
@@ -74,6 +71,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: Spacing.xl,
+    gap: Spacing.xxl,
+  },
+  preview: {
+    width: PREVIEW_DIAMETER,
+    height: PREVIEW_DIAMETER,
+    borderRadius: PREVIEW_DIAMETER,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.md,
+  },
+  previewLabel: {
+    fontSize: 15,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   copy: {
     alignItems: 'center',

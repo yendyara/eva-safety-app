@@ -17,6 +17,7 @@ import { MIN_TAP_TARGET, Spacing } from '@/constants/spacing';
 import { Typography } from '@/constants/typography';
 import { useAppTheme } from '@/utils/colorSystem';
 import {
+  ActivationMethod,
   CoordinateFormat,
   EmergencyRegion,
   ThemeMode,
@@ -55,7 +56,27 @@ export default function SettingsScreen() {
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Section title="Trusted contacts" colors={colors}>
+          <Text
+            accessibilityRole="button"
+            onPress={() =>
+              router.push({ pathname: '/contacts-picker', params: { returnTo: '/settings' } })
+            }
+            style={[Typography.body, styles.importLink, { color: colors.accent }]}
+          >
+            Import from contacts
+          </Text>
           <ContactForm contacts={contacts} onChange={handleContactsChange} />
+        </Section>
+
+        <Section title="Activation method" colors={colors}>
+          <SegmentedToggle
+            options={[
+              { value: 'hold', label: 'On-screen button' },
+              { value: 'volume', label: 'Volume button' },
+            ]}
+            value={settings.activationMethod}
+            onChange={(value) => updateSettings({ activationMethod: value as ActivationMethod })}
+          />
         </Section>
 
         <Section title="Emergency number" colors={colors}>
@@ -189,6 +210,10 @@ const styles = StyleSheet.create({
   },
   backArrow: {
     fontSize: 22,
+  },
+  importLink: {
+    minHeight: MIN_TAP_TARGET,
+    justifyContent: 'center',
   },
   scrollContent: {
     paddingHorizontal: Spacing.xl,
