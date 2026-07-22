@@ -1,12 +1,21 @@
 /**
- * The decoy: a convincing, boring notes app standing in for EVA.
+ * The decoy: a convincing, boring utility screen standing in for EVA.
  *
  * This exists because of a well-documented pattern in domestic abuse
  * situations — abusers frequently check a victim's phone, and an app that
  * visibly announces itself as a safety tool can escalate the exact danger
  * it exists to prevent. The decoy isn't a gimmick; it's a way for the app
  * to keep working without being detectable as what it is. Nothing here
- * hints at EVA — no color, no icon, no copy is shared with the real app.
+ * hints at EVA — no EVA color, no EVA icon, no EVA copy is shared with the
+ * real app.
+ *
+ * The label, icon, and color are entirely up to whoever sets this up —
+ * there's no built-in "recipe app" or "period tracker" persona baked in.
+ * A preset theme assumes something about who's using EVA and what would
+ * plausibly be on their phone; letting the person fill in their own label
+ * assumes nothing. The underlying shell stays a plain list layout (works
+ * under "Notes," "Tasks," "Reminders," whatever they pick) rather than
+ * trying to visually impersonate a specific kind of app.
  *
  * The way back in is a hidden triple-tap on the bottom-left corner. It's
  * deliberately undiscoverable by accident (a stray tap won't trigger it)
@@ -16,10 +25,10 @@
 import React, { useRef } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-const FAKE_NOTES = [
+const FAKE_ITEMS = [
   { id: '1', title: 'Grocery list', timestamp: '9:14 AM', preview: 'Milk, eggs, bread, coffee...' },
   { id: '2', title: 'Meeting notes - Monday', timestamp: 'Yesterday', preview: 'Follow up with team on...' },
-  { id: '3', title: 'Recipe ideas', timestamp: 'Sat', preview: 'Try the lemon pasta again...' },
+  { id: '3', title: 'Wifi password', timestamp: 'Sat', preview: 'Guest network: ask at the front desk...' },
   { id: '4', title: 'Call the plumber', timestamp: 'Jul 14', preview: 'Ask about the leak upstairs...' },
 ];
 
@@ -28,10 +37,13 @@ const TAP_WINDOW_MS = 1200;
 const TAP_ZONE_SIZE = 64;
 
 type DecoyNotesProps = {
+  label: string;
+  icon: string;
+  color: string;
   onReveal: () => void;
 };
 
-export function DecoyNotes({ onReveal }: DecoyNotesProps) {
+export function DecoyNotes({ label, icon, color, onReveal }: DecoyNotesProps) {
   const tapCount = useRef(0);
   const lastTapAt = useRef(0);
 
@@ -51,8 +63,11 @@ export function DecoyNotes({ onReveal }: DecoyNotesProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Notes</Text>
-      {FAKE_NOTES.map((note) => (
+      <View style={styles.headerRow}>
+        <Text style={[styles.headerIcon, { color }]}>{icon}</Text>
+        <Text style={styles.header}>{label}</Text>
+      </View>
+      {FAKE_ITEMS.map((note) => (
         <View key={note.id} style={styles.noteRow}>
           <View style={styles.noteText}>
             <Text style={styles.noteTitle}>{note.title}</Text>
@@ -82,11 +97,19 @@ const styles = StyleSheet.create({
     paddingTop: 64,
     paddingHorizontal: 20,
   },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 20,
+  },
+  headerIcon: {
+    fontSize: 28,
+  },
   header: {
     fontSize: 34,
     fontWeight: '700',
     color: '#000000',
-    marginBottom: 20,
   },
   noteRow: {
     paddingVertical: 14,

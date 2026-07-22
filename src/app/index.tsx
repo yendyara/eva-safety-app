@@ -1,5 +1,5 @@
 /**
- * Onboarding, step 1 of 5 — Welcome.
+ * Onboarding, step 1 of 6 — Welcome.
  *
  * Deliberately restrained: no illustration, no icon, no carousel dots.
  * Every extra element here is one more thing standing between a person and

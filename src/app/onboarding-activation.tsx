@@ -1,5 +1,5 @@
 /**
- * Onboarding, step 4 of 5 — choose how the alert gets triggered.
+ * Onboarding, step 5 of 6 — choose how the alert gets triggered.
  *
  * Two options are stored here: holding the on-screen button (the only
  * mechanism actually wired up today — see PanicButton) and pressing a

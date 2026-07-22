@@ -1,5 +1,5 @@
 /**
- * Onboarding, step 5 of 5 — the sequence's actual finish line.
+ * Onboarding, step 6 of 6 — the sequence's actual finish line.
  *
  * No skip link here — there's nothing left to skip. This is also the one
  * place the onboarding-complete flag gets set on a genuine finish, not a

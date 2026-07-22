@@ -9,16 +9,19 @@
  */
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { BackTapGuide } from '@/components/BackTapGuide';
 import { ContactForm } from '@/components/ContactForm';
+import { DECOY_COLOR_OPTIONS, DECOY_ICON_OPTIONS } from '@/constants/decoyOptions';
 import { MIN_TAP_TARGET, Spacing } from '@/constants/spacing';
 import { Typography } from '@/constants/typography';
 import { useAppTheme } from '@/utils/colorSystem';
 import {
   ActivationMethod,
   CoordinateFormat,
+  DecoySettings,
   EmergencyRegion,
   ThemeMode,
   TrustedContact,
@@ -77,6 +80,31 @@ export default function SettingsScreen() {
             value={settings.activationMethod}
             onChange={(value) => updateSettings({ activationMethod: value as ActivationMethod })}
           />
+        </Section>
+
+        <Section title="Trigger without opening the app" colors={colors}>
+          <Text style={[Typography.body, { color: colors.textSecondary }]}>
+            Back Tap lets you send an alert by tapping the back of your phone
+            twice or three times — no unlocking, no opening EVA. It works
+            through a Shortcut you set up once; here’s the fastest path.
+          </Text>
+          <BackTapGuide primaryLabel="Open Back Tap Settings" />
+          <Text style={[Typography.body, { color: colors.textSecondary }]}>
+            Once that’s set up, you can also remove the EVA icon from your
+            Home Screen entirely: long-press the icon, choose “Remove from
+            Home Screen,” and keep it in your App Library only. EVA keeps
+            working — it just never has to be visible.
+          </Text>
+        </Section>
+
+        <Section title="Decoy mode" colors={colors}>
+          <Text style={[Typography.body, { color: colors.textSecondary }]}>
+            Off by default. If you turn it on, choosing the × on Home
+            instantly swaps EVA for a plain screen you design — your own
+            label, icon, and color, not a pre-built theme. Triple-tap the
+            bottom-left corner of that screen to return to EVA.
+          </Text>
+          <DecoyEditor />
         </Section>
 
         <Section title="Emergency number" colors={colors}>
@@ -149,6 +177,84 @@ function Section({
   );
 }
 
+function DecoyEditor() {
+  const { colors, settings, updateSettings } = useAppTheme();
+  const decoy = settings.decoy;
+
+  const update = (partial: Partial<DecoySettings>) => {
+    updateSettings({ decoy: { ...decoy, ...partial } });
+  };
+
+  return (
+    <View style={styles.decoyEditor}>
+      <View style={styles.decoyToggleRow}>
+        <Text style={[Typography.body, { color: colors.textPrimary }]}>Enable decoy mode</Text>
+        <Switch
+          value={decoy.enabled}
+          onValueChange={(value) => update({ enabled: value })}
+          trackColor={{ false: colors.border, true: colors.accent }}
+        />
+      </View>
+
+      {decoy.enabled && (
+        <>
+          <TextInput
+            value={decoy.label}
+            onChangeText={(text) => update({ label: text })}
+            placeholder="Label (e.g. Notes, Tasks, Weather)"
+            placeholderTextColor={colors.textSecondary}
+            style={[styles.decoyInput, { color: colors.textPrimary, borderColor: colors.border }]}
+          />
+
+          <View style={styles.decoyOptionRow}>
+            {DECOY_ICON_OPTIONS.map((icon) => {
+              const isSelected = decoy.icon === icon;
+              return (
+                <Pressable
+                  key={icon}
+                  onPress={() => update({ icon })}
+                  accessibilityRole="button"
+                  style={[
+                    styles.decoyIconOption,
+                    { borderColor: isSelected ? colors.primary : colors.border },
+                  ]}
+                >
+                  <Text style={styles.decoyIconGlyph}>{icon}</Text>
+                </Pressable>
+              );
+            })}
+          </View>
+
+          <View style={styles.decoyOptionRow}>
+            {DECOY_COLOR_OPTIONS.map((color) => {
+              const isSelected = decoy.color === color;
+              return (
+                <Pressable
+                  key={color}
+                  onPress={() => update({ color })}
+                  accessibilityRole="button"
+                  style={[
+                    styles.decoyColorSwatch,
+                    { backgroundColor: color },
+                    isSelected && { borderColor: colors.textPrimary, borderWidth: 3 },
+                  ]}
+                />
+              );
+            })}
+          </View>
+
+          <View style={[styles.decoyPreview, { borderColor: colors.border }]}>
+            <Text style={[styles.decoyIconGlyph, { color: decoy.color }]}>{decoy.icon}</Text>
+            <Text style={[Typography.body, { color: colors.textPrimary }]}>
+              {decoy.label.trim() || 'Untitled'}
+            </Text>
+          </View>
+        </>
+      )}
+    </View>
+  );
+}
+
 function SegmentedToggle<T extends string>({
   options,
   value,
@@ -210,6 +316,51 @@ const styles = StyleSheet.create({
   },
   backArrow: {
     fontSize: 22,
+  },
+  decoyEditor: {
+    gap: Spacing.md,
+  },
+  decoyToggleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    minHeight: MIN_TAP_TARGET,
+  },
+  decoyInput: {
+    minHeight: MIN_TAP_TARGET,
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingHorizontal: Spacing.md,
+    fontSize: 16,
+  },
+  decoyOptionRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.sm,
+  },
+  decoyIconOption: {
+    width: MIN_TAP_TARGET,
+    height: MIN_TAP_TARGET,
+    borderRadius: 12,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  decoyIconGlyph: {
+    fontSize: 22,
+  },
+  decoyColorSwatch: {
+    width: MIN_TAP_TARGET,
+    height: MIN_TAP_TARGET,
+    borderRadius: MIN_TAP_TARGET,
+  },
+  decoyPreview: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    padding: Spacing.md,
+    borderWidth: 1,
+    borderRadius: 12,
   },
   importLink: {
     minHeight: MIN_TAP_TARGET,

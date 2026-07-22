@@ -1,5 +1,5 @@
 /**
- * Onboarding, step 2 of 5 — explains the panic button before anyone has to
+ * Onboarding, step 2 of 6 — explains the panic button before anyone has to
  * rely on it under stress.
  *
  * The static circle mock here isn't decoration — the global design

@@ -21,9 +21,7 @@ import { PanicButton } from '@/components/PanicButton';
 import { TextLink } from '@/components/TextLink';
 import { MIN_TAP_TARGET, Spacing } from '@/constants/spacing';
 import { useAppTheme } from '@/utils/colorSystem';
-import { getCurrentCoordinates } from '@/utils/getLocation';
-import { AlertResult, sendHelpAlert } from '@/utils/sendAlert';
-import { getContacts } from '@/utils/storage';
+import { triggerPanicAlert } from '@/utils/triggerAlert';
 
 const EMERGENCY_NUMBERS = { EU: '112', US: '911' } as const;
 
@@ -35,19 +33,9 @@ export default function HomeScreen() {
   const handleTrigger = useCallback(async () => {
     setStatus('Getting your location…');
     try {
-      const contacts = await getContacts();
-      const coords = await getCurrentCoordinates();
       setStatus('Sending alert…');
-      const result = await sendHelpAlert(contacts, coords);
+      const { params } = await triggerPanicAlert();
       setStatus(null);
-
-      const params: Record<string, string> = {
-        result: JSON.stringify(result satisfies AlertResult),
-      };
-      if (coords) {
-        params.latitude = String(coords.latitude);
-        params.longitude = String(coords.longitude);
-      }
       router.push({ pathname: '/alert-sent', params });
     } catch {
       setStatus(null);
@@ -85,14 +73,16 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      <Pressable
-        onPress={() => router.replace('/decoy')}
-        accessibilityRole="button"
-        accessibilityLabel="Hide EVA"
-        style={styles.decoyTrigger}
-      >
-        <Text style={[styles.decoyGlyph, { color: colors.textSecondary }]}>×</Text>
-      </Pressable>
+      {settings.decoy.enabled && (
+        <Pressable
+          onPress={() => router.replace('/decoy')}
+          accessibilityRole="button"
+          accessibilityLabel="Hide EVA"
+          style={styles.decoyTrigger}
+        >
+          <Text style={[styles.decoyGlyph, { color: colors.textSecondary }]}>×</Text>
+        </Pressable>
+      )}
     </SafeAreaView>
   );
 }

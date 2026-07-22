@@ -32,11 +32,33 @@ export type CoordinateFormat = 'decimal' | 'dms';
 export type ThemeMode = 'system' | 'light' | 'dark';
 export type ActivationMethod = 'hold' | 'volume';
 
+/**
+ * The disguise decoy mode presents when active. Deliberately just a label,
+ * an icon glyph, and a color — no preset "themes" (a recipe app, a period
+ * tracker, a makeup tutorial). Presets like that assume something about who
+ * is using EVA and what would plausibly be on their phone; a blank slate
+ * the person fills in themselves makes no assumption at all.
+ */
+export type DecoySettings = {
+  enabled: boolean;
+  label: string;
+  icon: string;
+  color: string;
+};
+
+export const DEFAULT_DECOY_SETTINGS: DecoySettings = {
+  enabled: false,
+  label: 'Notes',
+  icon: '📝',
+  color: '#8E8E93',
+};
+
 export type AppSettings = {
   emergencyRegion: EmergencyRegion;
   coordinateFormat: CoordinateFormat;
   themeMode: ThemeMode;
   activationMethod: ActivationMethod;
+  decoy: DecoySettings;
 };
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -44,6 +66,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   coordinateFormat: 'decimal',
   themeMode: 'system',
   activationMethod: 'hold',
+  decoy: DEFAULT_DECOY_SETTINGS,
 };
 
 /** Trusted contacts are capped at 3 — see ContactForm for the reasoning. */

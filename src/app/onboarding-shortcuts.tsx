@@ -1,37 +1,35 @@
 /**
- * Onboarding, step 3 of 6 — ask to set up trusted contacts.
+ * Onboarding, step 4 of 6 — trigger EVA without opening it.
  *
- * This screen only asks; the actual picking happens on the contacts-picker
- * screen (import from the device, screened for likely partner/family
- * matches, with a manual-entry fallback if contacts permission is
- * denied). Keeping the ask and the picker separate means skipping this
- * step is a single tap, not an abandoned form.
- *
- * No sign-up, no account, nothing sent anywhere — contacts are written
- * straight to AsyncStorage on this device. An account is a record, and a
- * record is something that can be found. For someone whose safety depends
- * on an abuser not knowing this app exists, skipping account creation
- * isn't a convenience shortcut, it's the whole point: there is nothing to
- * discover outside the phone itself.
+ * This is the discreet path: Back Tap or a Siri Shortcut, both of which
+ * fire without unlocking the phone or navigating any UI. Setting it up
+ * means briefly leaving EVA for the Shortcuts app and iOS Settings, so
+ * this step is explicitly optional and explicitly resumable later — see
+ * the same guide reachable from Settings at any time.
  */
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { BackTapGuide } from '@/components/BackTapGuide';
 import { OnboardingHeader } from '@/components/OnboardingHeader';
-import { PrimaryButton } from '@/components/PrimaryButton';
+import { TextLink } from '@/components/TextLink';
 import { Spacing } from '@/constants/spacing';
 import { Typography } from '@/constants/typography';
 import { useAppTheme } from '@/utils/colorSystem';
 import { setOnboardingComplete } from '@/utils/storage';
 
-export default function OnboardingContactsAskScreen() {
+export default function OnboardingShortcutsScreen() {
   const router = useRouter();
   const { colors } = useAppTheme();
 
   const handleSkip = async () => {
     await setOnboardingComplete();
     router.replace('/home');
+  };
+
+  const handleLater = () => {
+    router.push('/onboarding-activation');
   };
 
   return (
@@ -41,25 +39,21 @@ export default function OnboardingContactsAskScreen() {
       <View style={styles.content}>
         <View style={styles.copy}>
           <Text style={[Typography.heading, styles.headline, { color: colors.textPrimary }]}>
-            Who should eva alert?
+            Trigger eva without opening it
           </Text>
           <Text style={[Typography.body, styles.subtext, { color: colors.textSecondary }]}>
-            Choose up to 3 trusted people. eva will alert them if you need
-            help. You can do this now or later from Settings.
+            Double or triple tap the back of your phone (Back Tap) or use a
+            Siri Shortcut to send an alert — no unlocking, no app to
+            navigate. Once it’s set up, you can also remove the eva icon
+            from your Home Screen and keep it in your App Library only.
           </Text>
         </View>
+
+        <BackTapGuide primaryLabel="Set this up now" />
       </View>
 
       <View style={styles.footer}>
-        <PrimaryButton
-          label="Choose contacts"
-          onPress={() =>
-            router.push({
-              pathname: '/contacts-picker',
-              params: { returnTo: '/onboarding-shortcuts' },
-            })
-          }
-        />
+        <TextLink label="I'll do this later" onPress={handleLater} colorToken="textSecondary" />
       </View>
     </SafeAreaView>
   );
@@ -71,12 +65,11 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: Spacing.xl,
+    gap: Spacing.xxl,
   },
   copy: {
-    alignItems: 'center',
     gap: Spacing.md,
   },
   headline: {
@@ -86,6 +79,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   footer: {
+    alignItems: 'center',
     paddingHorizontal: Spacing.xl,
     paddingBottom: Spacing.xl,
   },
