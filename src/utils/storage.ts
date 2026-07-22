@@ -8,6 +8,7 @@
  * app erases it completely.
  */
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Localization from 'expo-localization';
 
 export type TrustedContact = {
   id: string;
@@ -61,8 +62,28 @@ export type AppSettings = {
   decoy: DecoySettings;
 };
 
+/**
+ * The panic button has to work before anyone has touched a settings
+ * screen, so the emergency number can't wait on a user choice — it's
+ * inferred from the device's region at first launch. An undetermined
+ * region falls back to 911/US rather than 112/EU: guessing wrong and
+ * showing the wrong number is worse than defaulting to the number more
+ * likely to be right for an undetected/US-adjacent locale. This is only
+ * ever used to seed the *first* value; once anything is saved, that
+ * persisted choice always wins over recomputing this.
+ */
+function getDefaultEmergencyRegion(): EmergencyRegion {
+  try {
+    const regionCode = Localization.getLocales()[0]?.regionCode;
+    if (regionCode && regionCode !== 'US') return 'EU';
+    return 'US';
+  } catch {
+    return 'US';
+  }
+}
+
 export const DEFAULT_SETTINGS: AppSettings = {
-  emergencyRegion: 'EU',
+  emergencyRegion: getDefaultEmergencyRegion(),
   coordinateFormat: 'decimal',
   themeMode: 'system',
   activationMethod: 'hold',
@@ -72,11 +93,29 @@ export const DEFAULT_SETTINGS: AppSettings = {
 /** Trusted contacts are capped at 3 — see ContactForm for the reasoning. */
 export const MAX_TRUSTED_CONTACTS = 3;
 
+/**
+ * The four Phase 2 ("Setup") onboarding steps. Tracked independently of
+ * whether onboarding itself is complete, because someone can skip all of
+ * them during onboarding and configure each one later from Settings —
+ * marking a step complete happens at the point of actual engagement
+ * (saving a contact, picking an activation method, etc.), wherever that
+ * happens, not just inside the onboarding screens.
+ */
+export type SetupStep = 'contacts' | 'activation' | 'shortcuts' | 'decoy';
+export const ALL_SETUP_STEPS: SetupStep[] = ['contacts', 'activation', 'shortcuts', 'decoy'];
+
+export type SetupProgress = {
+  completedSteps: SetupStep[];
+};
+
+const DEFAULT_SETUP_PROGRESS: SetupProgress = { completedSteps: [] };
+
 const KEYS = {
   contacts: 'eva:trustedContacts',
   settings: 'eva:settings',
   excludedContacts: 'eva:excludedContacts',
   onboardingComplete: 'eva:onboardingComplete',
+  setupProgress: 'eva:setupProgress',
 } as const;
 
 /**
@@ -159,6 +198,27 @@ export async function getOnboardingComplete(): Promise<boolean> {
 
 export async function setOnboardingComplete(): Promise<void> {
   await AsyncStorage.setItem(KEYS.onboardingComplete, 'true');
+}
+
+export async function getSetupProgress(): Promise<SetupProgress> {
+  const raw = await AsyncStorage.getItem(KEYS.setupProgress);
+  if (!raw) return DEFAULT_SETUP_PROGRESS;
+  try {
+    return JSON.parse(raw) as SetupProgress;
+  } catch {
+    return DEFAULT_SETUP_PROGRESS;
+  }
+}
+
+/**
+ * Idempotent by design — safe to call every time a step's underlying
+ * action happens (e.g. every contact save), not just the first time.
+ */
+export async function markSetupStepComplete(step: SetupStep): Promise<void> {
+  const progress = await getSetupProgress();
+  if (progress.completedSteps.includes(step)) return;
+  const next: SetupProgress = { completedSteps: [...progress.completedSteps, step] };
+  await AsyncStorage.setItem(KEYS.setupProgress, JSON.stringify(next));
 }
 
 export async function getSettings(): Promise<AppSettings> {

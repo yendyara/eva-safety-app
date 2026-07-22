@@ -1,8 +1,13 @@
 /**
- * Shared top bar for the onboarding sequence: an optional back arrow and a
- * "Skip" link. Skipping from any step jumps straight to Home, not just past
- * that one step — onboarding is meant to help, never to gate access to the
- * panic button, so nothing about it should feel mandatory.
+ * Shared top bar for the onboarding sequence: an optional back arrow and an
+ * optional "Skip" link.
+ *
+ * Skip only ever advances past the current step to the next one in the
+ * sequence — it never exits onboarding early. Phase 1 (understanding EVA)
+ * omits onSkip entirely, since that phase is explanatory only and isn't
+ * skippable; Phase 2 (setup) passes onSkip so each configuration step can
+ * be individually bypassed without dropping the user back into the app
+ * before they've seen the rest of the sequence.
  */
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -12,7 +17,7 @@ import { useAppTheme } from '@/utils/colorSystem';
 
 type OnboardingHeaderProps = {
   onBack?: () => void;
-  onSkip: () => void;
+  onSkip?: () => void;
 };
 
 export function OnboardingHeader({ onBack, onSkip }: OnboardingHeaderProps) {
@@ -33,14 +38,18 @@ export function OnboardingHeader({ onBack, onSkip }: OnboardingHeaderProps) {
         <View style={styles.touchArea} />
       )}
 
-      <Pressable
-        onPress={onSkip}
-        accessibilityRole="button"
-        accessibilityLabel="Skip initial setup"
-        style={styles.touchArea}
-      >
-        <Text style={[styles.skipLabel, { color: colors.textSecondary }]}>Skip</Text>
-      </Pressable>
+      {onSkip ? (
+        <Pressable
+          onPress={onSkip}
+          accessibilityRole="button"
+          accessibilityLabel="Skip this step"
+          style={styles.touchArea}
+        >
+          <Text style={[styles.skipLabel, { color: colors.textSecondary }]}>Skip</Text>
+        </Pressable>
+      ) : (
+        <View style={styles.touchArea} />
+      )}
     </View>
   );
 }

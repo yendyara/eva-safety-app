@@ -44,6 +44,7 @@ import {
   excludeContacts,
   filterExcludedContacts,
   getContacts,
+  markSetupStepComplete,
   normalizePhone,
   saveContacts,
 } from '@/utils/storage';
@@ -181,12 +182,14 @@ export default function ContactsPickerScreen() {
     const chosen = poolContacts.filter((c) => selectedIds.has(c.id));
     const merged = [...existingContacts, ...chosen.map(({ id, name, phone }) => ({ id, name, phone }))];
     await saveContacts(merged); // hard-filters excluded numbers internally
+    await markSetupStepComplete('contacts'); // reached with ≥1 selected, per the Save button's disabled state
     router.replace(destination);
   };
 
   const finishManual = async (contacts: TrustedContact[]) => {
     const valid = contacts.filter((c) => c.name.trim() && c.phone.trim());
     await saveContacts(valid);
+    await markSetupStepComplete('contacts'); // reached with ≥1 valid entry, per the Save button's disabled state
     router.replace(destination);
   };
 

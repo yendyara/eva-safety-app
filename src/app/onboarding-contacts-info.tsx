@@ -1,12 +1,10 @@
 /**
- * Onboarding, Phase 1 ("Understanding EVA") — step 2 of 5 — explains the
- * panic button before anyone has to rely on it under stress.
+ * Onboarding, Phase 1 ("Understanding EVA") — step 3 of 5 — what trusted
+ * contacts are and how an alert reaches them.
  *
- * The static circle mock here isn't decoration — the global design
- * principle is "nothing decorative that doesn't serve the user," and
- * showing the actual button (inert, no hold timer) so it's recognizable
- * later is the one exception that earns its place: familiarity in the
- * moment that matters is worth the one static shape.
+ * Purely explanatory — no permission requests, no picking anyone yet.
+ * That happens in Phase 2 (see onboarding-contacts.tsx), once the person
+ * already understands what adding someone actually does.
  */
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
@@ -18,9 +16,7 @@ import { Spacing } from '@/constants/spacing';
 import { Typography } from '@/constants/typography';
 import { useAppTheme } from '@/utils/colorSystem';
 
-const PREVIEW_DIAMETER = 140;
-
-export default function OnboardingPanicButtonScreen() {
+export default function OnboardingContactsInfoScreen() {
   const router = useRouter();
   const { colors } = useAppTheme();
 
@@ -29,28 +25,23 @@ export default function OnboardingPanicButtonScreen() {
       <OnboardingHeader onBack={() => router.back()} />
 
       <View style={styles.content}>
-        <View
-          style={[
-            styles.preview,
-            { backgroundColor: colors.primary },
-          ]}
-        >
-          <Text style={[styles.previewLabel, { color: colors.onPrimary }]}>Hold to activate</Text>
-        </View>
-
         <View style={styles.copy}>
           <Text style={[Typography.heading, styles.headline, { color: colors.textPrimary }]}>
-            The panic button
+            Who eva alerts
           </Text>
           <Text style={[Typography.body, styles.subtext, { color: colors.textSecondary }]}>
-            Hold the button for 3 seconds to alert your trusted contacts and
-            share your location with them.
+            Up to 3 trusted people — a partner, a sibling, a close friend.
+            When you trigger eva, they instantly get a text with your
+            location, so they can reach you or call for help on your behalf.
           </Text>
         </View>
       </View>
 
       <View style={styles.footer}>
-        <PrimaryButton label="Continue" onPress={() => router.push('/onboarding-contacts-info')} />
+        <PrimaryButton
+          label="Continue"
+          onPress={() => router.push('/onboarding-false-alarm-info')}
+        />
       </View>
     </SafeAreaView>
   );
@@ -65,20 +56,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: Spacing.xl,
-    gap: Spacing.xxl,
-  },
-  preview: {
-    width: PREVIEW_DIAMETER,
-    height: PREVIEW_DIAMETER,
-    borderRadius: PREVIEW_DIAMETER,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: Spacing.md,
-  },
-  previewLabel: {
-    fontSize: 15,
-    fontWeight: '600',
-    textAlign: 'center',
   },
   copy: {
     alignItems: 'center',

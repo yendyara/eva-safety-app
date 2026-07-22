@@ -52,7 +52,8 @@
         {
           "contactsPermission": "EVA reads your contacts only to help you pick trusted contacts — nothing ever leaves your device."
         }
-      ]
+      ],
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true,

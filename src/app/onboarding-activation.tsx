@@ -1,5 +1,6 @@
 /**
- * Onboarding, step 5 of 6 — choose how the alert gets triggered.
+ * Onboarding, Phase 2 ("Setup") — step 2 of 5 — choose how the alert gets
+ * triggered.
  *
  * Two options are stored here: holding the on-screen button (the only
  * mechanism actually wired up today — see PanicButton) and pressing a
@@ -18,7 +19,7 @@ import { PrimaryButton } from '@/components/PrimaryButton';
 import { MIN_TAP_TARGET, Spacing } from '@/constants/spacing';
 import { Typography } from '@/constants/typography';
 import { useAppTheme } from '@/utils/colorSystem';
-import { ActivationMethod, setOnboardingComplete } from '@/utils/storage';
+import { ActivationMethod, markSetupStepComplete } from '@/utils/storage';
 
 const OPTIONS: { value: ActivationMethod; label: string; description: string }[] = [
   {
@@ -37,14 +38,12 @@ export default function OnboardingActivationScreen() {
   const router = useRouter();
   const { colors, settings, updateSettings } = useAppTheme();
 
-  const handleSkip = async () => {
-    await setOnboardingComplete();
-    router.replace('/home');
-  };
-
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      <OnboardingHeader onBack={() => router.back()} onSkip={handleSkip} />
+      <OnboardingHeader
+        onBack={() => router.back()}
+        onSkip={() => router.push('/onboarding-shortcuts')}
+      />
 
       <View style={styles.content}>
         <View style={styles.copy}>
@@ -59,7 +58,15 @@ export default function OnboardingActivationScreen() {
             return (
               <Pressable
                 key={option.value}
-                onPress={() => updateSettings({ activationMethod: option.value })}
+                onPress={() => {
+                  // Marked complete on the actual choice, not on Continue —
+                  // clicking through without picking anything isn't
+                  // "engaging" with this step (see onboarding-decoy.tsx for
+                  // why that distinction determines whether "You're all
+                  // set" ever shows).
+                  updateSettings({ activationMethod: option.value });
+                  markSetupStepComplete('activation');
+                }}
                 accessibilityRole="button"
                 style={[
                   styles.option,
@@ -93,7 +100,7 @@ export default function OnboardingActivationScreen() {
       </View>
 
       <View style={styles.footer}>
-        <PrimaryButton label="Continue" onPress={() => router.push('/onboarding-ready')} />
+        <PrimaryButton label="Continue" onPress={() => router.push('/onboarding-shortcuts')} />
       </View>
     </SafeAreaView>
   );

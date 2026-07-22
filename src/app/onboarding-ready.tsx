@@ -1,9 +1,12 @@
 /**
- * Onboarding, step 6 of 6 — the sequence's actual finish line.
+ * Onboarding, Phase 2 ("Setup") — step 5 of 5 — the sequence's actual
+ * finish line, reached whether every Phase 2 step was completed or all of
+ * them were skipped.
  *
- * No skip link here — there's nothing left to skip. This is also the one
- * place the onboarding-complete flag gets set on a genuine finish, not a
- * bail-out, mirroring how every earlier step's "Skip" sets the same flag.
+ * No skip link here — there's nothing left to skip. This is the ONLY
+ * place the onboarding-complete flag gets set — no earlier step exits
+ * onboarding on its own, by design (see requirement fix: skip advances to
+ * the next step, never back to the app early).
  */
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';

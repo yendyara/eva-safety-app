@@ -1,12 +1,11 @@
 /**
- * Onboarding, Phase 1 ("Understanding EVA") — step 2 of 5 — explains the
- * panic button before anyone has to rely on it under stress.
+ * Onboarding, Phase 1 ("Understanding EVA") — step 4 of 5 — what happens
+ * if the alert turns out to be a false alarm.
  *
- * The static circle mock here isn't decoration — the global design
- * principle is "nothing decorative that doesn't serve the user," and
- * showing the actual button (inert, no hold timer) so it's recognizable
- * later is the one exception that earns its place: familiarity in the
- * moment that matters is worth the one static shape.
+ * This exists as its own step because it matters for the same reason the
+ * 3-second hold does: knowing in advance that a false trigger is easy to
+ * walk back removes a reason to hesitate before ever using the button.
+ * The actual control lives on the Alert Sent screen — see alert-sent.tsx.
  */
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
@@ -18,9 +17,7 @@ import { Spacing } from '@/constants/spacing';
 import { Typography } from '@/constants/typography';
 import { useAppTheme } from '@/utils/colorSystem';
 
-const PREVIEW_DIAMETER = 140;
-
-export default function OnboardingPanicButtonScreen() {
+export default function OnboardingFalseAlarmInfoScreen() {
   const router = useRouter();
   const { colors } = useAppTheme();
 
@@ -29,28 +26,23 @@ export default function OnboardingPanicButtonScreen() {
       <OnboardingHeader onBack={() => router.back()} />
 
       <View style={styles.content}>
-        <View
-          style={[
-            styles.preview,
-            { backgroundColor: colors.primary },
-          ]}
-        >
-          <Text style={[styles.previewLabel, { color: colors.onPrimary }]}>Hold to activate</Text>
-        </View>
-
         <View style={styles.copy}>
           <Text style={[Typography.heading, styles.headline, { color: colors.textPrimary }]}>
-            The panic button
+            If it’s a false alarm
           </Text>
           <Text style={[Typography.body, styles.subtext, { color: colors.textSecondary }]}>
-            Hold the button for 3 seconds to alert your trusted contacts and
-            share your location with them.
+            After an alert goes out, if you’re safe, one tap sends a
+            follow-up text telling your contacts to disregard it. No call,
+            no explanation needed in the moment.
           </Text>
         </View>
       </View>
 
       <View style={styles.footer}>
-        <PrimaryButton label="Continue" onPress={() => router.push('/onboarding-contacts-info')} />
+        <PrimaryButton
+          label="Continue"
+          onPress={() => router.push('/onboarding-activation-info')}
+        />
       </View>
     </SafeAreaView>
   );
@@ -65,20 +57,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: Spacing.xl,
-    gap: Spacing.xxl,
-  },
-  preview: {
-    width: PREVIEW_DIAMETER,
-    height: PREVIEW_DIAMETER,
-    borderRadius: PREVIEW_DIAMETER,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: Spacing.md,
-  },
-  previewLabel: {
-    fontSize: 15,
-    fontWeight: '600',
-    textAlign: 'center',
   },
   copy: {
     alignItems: 'center',

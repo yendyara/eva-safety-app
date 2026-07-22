@@ -1,12 +1,11 @@
 /**
- * Onboarding, Phase 1 ("Understanding EVA") — step 2 of 5 — explains the
- * panic button before anyone has to rely on it under stress.
+ * Onboarding, Phase 1 ("Understanding EVA") — step 5 of 5 — the concept of
+ * triggering eva without opening it, before Phase 2 offers to set it up.
  *
- * The static circle mock here isn't decoration — the global design
- * principle is "nothing decorative that doesn't serve the user," and
- * showing the actual button (inert, no hold timer) so it's recognizable
- * later is the one exception that earns its place: familiarity in the
- * moment that matters is worth the one static shape.
+ * Concept only, deliberately no buttons or deep links here — this is the
+ * last Phase 1 screen, so the only forward action is moving into Phase 2.
+ * The actual guided setup (copy the link, create the Shortcut, assign it
+ * to Back Tap) lives on onboarding-shortcuts.tsx.
  */
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
@@ -18,9 +17,7 @@ import { Spacing } from '@/constants/spacing';
 import { Typography } from '@/constants/typography';
 import { useAppTheme } from '@/utils/colorSystem';
 
-const PREVIEW_DIAMETER = 140;
-
-export default function OnboardingPanicButtonScreen() {
+export default function OnboardingActivationInfoScreen() {
   const router = useRouter();
   const { colors } = useAppTheme();
 
@@ -29,28 +26,21 @@ export default function OnboardingPanicButtonScreen() {
       <OnboardingHeader onBack={() => router.back()} />
 
       <View style={styles.content}>
-        <View
-          style={[
-            styles.preview,
-            { backgroundColor: colors.primary },
-          ]}
-        >
-          <Text style={[styles.previewLabel, { color: colors.onPrimary }]}>Hold to activate</Text>
-        </View>
-
         <View style={styles.copy}>
           <Text style={[Typography.heading, styles.headline, { color: colors.textPrimary }]}>
-            The panic button
+            You don’t have to open eva to use it
           </Text>
           <Text style={[Typography.body, styles.subtext, { color: colors.textSecondary }]}>
-            Hold the button for 3 seconds to alert your trusted contacts and
-            share your location with them.
+            Double or triple tapping the back of your phone, a Siri
+            Shortcut, or hiding eva’s icon from your Home Screen entirely —
+            eva can work without ever being visibly open. Next, you’ll get
+            the chance to set any of this up.
           </Text>
         </View>
       </View>
 
       <View style={styles.footer}>
-        <PrimaryButton label="Continue" onPress={() => router.push('/onboarding-contacts-info')} />
+        <PrimaryButton label="Continue" onPress={() => router.push('/onboarding-setup-prompt')} />
       </View>
     </SafeAreaView>
   );
@@ -65,20 +55,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: Spacing.xl,
-    gap: Spacing.xxl,
-  },
-  preview: {
-    width: PREVIEW_DIAMETER,
-    height: PREVIEW_DIAMETER,
-    borderRadius: PREVIEW_DIAMETER,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: Spacing.md,
-  },
-  previewLabel: {
-    fontSize: 15,
-    fontWeight: '600',
-    textAlign: 'center',
   },
   copy: {
     alignItems: 'center',

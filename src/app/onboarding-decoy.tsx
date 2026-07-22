@@ -1,51 +1,50 @@
 /**
- * Onboarding, Phase 2 ("Setup") — step 3 of 5 — set up Back Tap / a Siri
- * Shortcut.
+ * Onboarding, Phase 2 ("Setup") — step 4 of 5 — optional decoy mode setup.
  *
- * The concept was already introduced in Phase 1 (onboarding-activation-
- * info.tsx); this screen is the actual guided setup. Setting it up means
- * briefly leaving eva for the Shortcuts app and iOS Settings, so — like
- * every Phase 2 step — it's skippable without dropping the user out of
- * onboarding: both "Skip" and "I'll do this later" just move on to the
- * next step (decoy mode), never back to the app early. The same guide is
- * reachable from Settings at any time.
+ * Off by default, no preset persona — see DecoyEditor for the actual
+ * editing logic, shared verbatim with Settings. Skip and Continue lead to
+ * the exact same place (the final screen); this step is entirely optional
+ * and there's nothing to "complete" here beyond what the person chooses
+ * to fill in.
  */
 import { useRouter } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { BackTapGuide } from '@/components/BackTapGuide';
+import { DecoyEditor } from '@/components/DecoyEditor';
 import { OnboardingHeader } from '@/components/OnboardingHeader';
-import { TextLink } from '@/components/TextLink';
+import { PrimaryButton } from '@/components/PrimaryButton';
 import { Spacing } from '@/constants/spacing';
 import { Typography } from '@/constants/typography';
 import { useAppTheme } from '@/utils/colorSystem';
 
-export default function OnboardingShortcutsScreen() {
+export default function OnboardingDecoyScreen() {
   const router = useRouter();
   const { colors } = useAppTheme();
 
-  const goNext = () => router.push('/onboarding-decoy');
+  const goNext = () => router.push('/onboarding-ready');
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <OnboardingHeader onBack={() => router.back()} onSkip={goNext} />
 
-      <View style={styles.content}>
+      <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.copy}>
           <Text style={[Typography.heading, styles.headline, { color: colors.textPrimary }]}>
-            Set up Back Tap
+            Disguise eva (optional)
           </Text>
           <Text style={[Typography.body, styles.subtext, { color: colors.textSecondary }]}>
-            Here’s the fastest way to get it working.
+            If you turn this on, the × on Home swaps eva for a plain screen
+            you design — your own label, icon, and color, not a pre-built
+            theme. Off by default.
           </Text>
         </View>
 
-        <BackTapGuide primaryLabel="Set this up now" />
-      </View>
+        <DecoyEditor />
+      </ScrollView>
 
       <View style={styles.footer}>
-        <TextLink label="I'll do this later" onPress={goNext} colorToken="textSecondary" />
+        <PrimaryButton label="Continue" onPress={goNext} />
       </View>
     </SafeAreaView>
   );
@@ -56,10 +55,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    flex: 1,
-    justifyContent: 'center',
     paddingHorizontal: Spacing.xl,
-    gap: Spacing.xxl,
+    paddingTop: Spacing.xl,
+    gap: Spacing.xl,
   },
   copy: {
     gap: Spacing.md,
@@ -71,7 +69,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   footer: {
-    alignItems: 'center',
     paddingHorizontal: Spacing.xl,
     paddingBottom: Spacing.xl,
   },

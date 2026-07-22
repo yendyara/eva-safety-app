@@ -1,5 +1,11 @@
 /**
- * Onboarding, step 1 of 6 — Welcome.
+ * Onboarding, Phase 1 ("Understanding EVA") — step 1 of 5 — Welcome.
+ *
+ * Phase 1 has no skip. It's purely explanatory — what EVA is, how the
+ * panic button and trusted contacts and Back Tap actually work — and the
+ * user goes through all of it before Phase 2 lets them configure anything.
+ * That's a deliberate safety choice, not friction: someone shouldn't be
+ * setting up an emergency tool before they understand what it does.
  *
  * Deliberately restrained: no illustration, no icon, no carousel dots.
  * Every extra element here is one more thing standing between a person and
@@ -12,20 +18,19 @@
  * response than a dark, dense one would.
  *
  * On mount this screen checks an explicit "onboarding complete" flag (set
- * on finishing OR skipping the sequence) and, if it's already set, skips
- * straight to Home — the whole 5-step sequence only ever runs once.
+ * only on reaching the final screen — see onboarding-ready.tsx) and, if
+ * it's already set, skips straight to Home so the sequence only runs once.
  */
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { OnboardingHeader } from '@/components/OnboardingHeader';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { Spacing } from '@/constants/spacing';
 import { Typography } from '@/constants/typography';
 import { useAppTheme } from '@/utils/colorSystem';
-import { getOnboardingComplete, setOnboardingComplete } from '@/utils/storage';
+import { getOnboardingComplete } from '@/utils/storage';
 
 export default function WelcomeScreen() {
   const router = useRouter();
@@ -42,19 +47,12 @@ export default function WelcomeScreen() {
     });
   }, [router]);
 
-  const handleSkip = async () => {
-    await setOnboardingComplete();
-    router.replace('/home');
-  };
-
   if (isChecking) {
     return <View style={[styles.container, { backgroundColor: colors.background }]} />;
   }
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      <OnboardingHeader onSkip={handleSkip} />
-
       <View style={styles.content}>
         <Text style={[styles.wordmark, { color: colors.primary }]}>eva</Text>
 
