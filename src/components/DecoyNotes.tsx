@@ -21,6 +21,10 @@
  * deliberately undiscoverable by accident (a stray tap won't trigger it)
  * but fast to execute once you know the gesture, since re-entering EVA is
  * itself something that may need to happen quickly and unnoticed.
+ *
+ * The zone sits a few points above the screen's bottom edge rather than
+ * flush against it — right at bottom:0 it competed with iOS's edge-swipe
+ * home gesture, which could eat the tap before it ever reached this view.
  */
 import React, { useRef } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -34,7 +38,8 @@ const FAKE_ITEMS = [
 
 const TAP_COUNT_TO_REVEAL = 3;
 const TAP_WINDOW_MS = 1200;
-const TAP_ZONE_SIZE = 64;
+const TAP_ZONE_SIZE = 72;
+const TAP_ZONE_BOTTOM_OFFSET = 8;
 
 type DecoyNotesProps = {
   label: string;
@@ -131,7 +136,7 @@ const styles = StyleSheet.create({
   cornerTapZone: {
     position: 'absolute',
     left: 0,
-    bottom: 0,
+    bottom: TAP_ZONE_BOTTOM_OFFSET,
     width: TAP_ZONE_SIZE,
     height: TAP_ZONE_SIZE,
   },
