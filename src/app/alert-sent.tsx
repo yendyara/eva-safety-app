@@ -9,14 +9,14 @@
  * plainly what happened, show who was reached, and get out of the way.
  */
 import * as Clipboard from 'expo-clipboard';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { TextLink } from '@/components/TextLink';
-import { Spacing } from '@/constants/spacing';
+import { MIN_TAP_TARGET, Spacing } from '@/constants/spacing';
 import { Typography } from '@/constants/typography';
 import { useAppTheme } from '@/utils/colorSystem';
 import { formatCoordinates } from '@/utils/getLocation';
@@ -32,6 +32,7 @@ const STATUS_COPY: Record<AlertResult['composerResult'], string> = {
 };
 
 export default function AlertSentScreen() {
+  const router = useRouter();
   const { colors, settings } = useAppTheme();
   const params = useLocalSearchParams<{ result: string; latitude?: string; longitude?: string }>();
   const [cancelStatus, setCancelStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
@@ -64,6 +65,15 @@ export default function AlertSentScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <Pressable
+        onPress={() => router.back()}
+        accessibilityRole="button"
+        accessibilityLabel="Back"
+        style={styles.backButton}
+      >
+        <Text style={[styles.backArrow, { color: colors.textPrimary }]}>←</Text>
+      </Pressable>
+
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={[Typography.heading, { color: colors.textPrimary }]}>
           {STATUS_COPY[result.composerResult]}
@@ -117,6 +127,16 @@ export default function AlertSentScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  backButton: {
+    width: MIN_TAP_TARGET,
+    height: MIN_TAP_TARGET,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: Spacing.sm,
+  },
+  backArrow: {
+    fontSize: 22,
   },
   scrollContent: {
     paddingHorizontal: Spacing.xl,
