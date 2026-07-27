@@ -1,5 +1,5 @@
 /**
- * Onboarding, Phase 1 ("Understanding EVA") — step 4 of 5 — what happens
+ * Onboarding, Phase 1 ("Understanding EVA") — step 4 of 6 — what happens
  * if the alert turns out to be a false alarm.
  *
  * This exists as its own step because it matters for the same reason the

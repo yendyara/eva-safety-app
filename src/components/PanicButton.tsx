@@ -21,7 +21,9 @@ import Svg, { Circle } from 'react-native-svg';
 
 import { useAppTheme } from '@/utils/colorSystem';
 
-const HOLD_DURATION_MS = 3000;
+// Exported so other trigger surfaces (the decoy screen's hidden
+// hold-to-alert gesture) use the exact same threshold as the real button.
+export const HOLD_DURATION_MS = 3000;
 const BUTTON_DIAMETER = 220;
 const STROKE_WIDTH = 6;
 

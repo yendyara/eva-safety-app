@@ -1,5 +1,5 @@
 /**
- * Onboarding, Phase 1 ("Understanding EVA") — step 3 of 5 — what trusted
+ * Onboarding, Phase 1 ("Understanding EVA") — step 3 of 6 — what trusted
  * contacts are and how an alert reaches them.
  *
  * Purely explanatory — no permission requests, no picking anyone yet.

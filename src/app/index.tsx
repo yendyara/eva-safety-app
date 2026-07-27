@@ -1,5 +1,5 @@
 /**
- * Onboarding, Phase 1 ("Understanding EVA") — step 1 of 5 — Welcome.
+ * Onboarding, Phase 1 ("Understanding EVA") — step 1 of 6 — Welcome.
  *
  * Phase 1 has no skip. It's purely explanatory — what EVA is, how the
  * panic button and trusted contacts and Back Tap actually work — and the
