@@ -71,7 +71,7 @@ export default function OnboardingActivationScreen() {
                 style={[
                   styles.option,
                   {
-                    borderColor: isSelected ? colors.primary : colors.border,
+                    borderColor: isSelected ? colors.primary : colors.borderDefined,
                     backgroundColor: isSelected ? colors.primary : colors.surface,
                   },
                 ]}

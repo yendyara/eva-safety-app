@@ -42,7 +42,7 @@ export function ContactForm({ contacts, onChange }: ContactFormProps) {
   return (
     <View style={styles.container}>
       {contacts.map((contact, index) => (
-        <View key={contact.id} style={[styles.row, { borderColor: colors.border }]}>
+        <View key={contact.id} style={[styles.row, { borderColor: colors.borderSubtle }]}>
           <View style={styles.rowHeader}>
             <Text style={[Typography.label, { color: colors.textSecondary }]}>
               CONTACT {index + 1}
@@ -60,7 +60,7 @@ export function ContactForm({ contacts, onChange }: ContactFormProps) {
             onChangeText={(text) => updateContact(contact.id, 'name', text)}
             placeholder="Name"
             placeholderTextColor={colors.textSecondary}
-            style={[styles.input, { color: colors.textPrimary, borderColor: colors.border }]}
+            style={[styles.input, { color: colors.textPrimary, borderColor: colors.borderDefined }]}
             autoCapitalize="words"
           />
           <TextInput
@@ -68,7 +68,7 @@ export function ContactForm({ contacts, onChange }: ContactFormProps) {
             onChangeText={(text) => updateContact(contact.id, 'phone', text)}
             placeholder="Phone number"
             placeholderTextColor={colors.textSecondary}
-            style={[styles.input, { color: colors.textPrimary, borderColor: colors.border }]}
+            style={[styles.input, { color: colors.textPrimary, borderColor: colors.borderDefined }]}
             keyboardType="phone-pad"
           />
         </View>

@@ -168,11 +168,11 @@ function Section({
   children,
 }: {
   title: string;
-  colors: { textPrimary: string; border: string };
+  colors: { textPrimary: string; borderSubtle: string };
   children: React.ReactNode;
 }) {
   return (
-    <View style={[styles.section, { borderColor: colors.border }]}>
+    <View style={[styles.section, { borderColor: colors.borderSubtle }]}>
       <Text style={[Typography.label, styles.sectionTitle, { color: colors.textPrimary }]}>
         {title.toUpperCase()}
       </Text>
@@ -204,7 +204,7 @@ function SegmentedToggle<T extends string>({
             style={[
               styles.segmentedOption,
               {
-                borderColor: isSelected ? colors.primary : colors.border,
+                borderColor: isSelected ? colors.primary : colors.borderDefined,
                 backgroundColor: isSelected ? colors.primary : 'transparent',
               },
             ]}

@@ -18,7 +18,7 @@ export const Typography = StyleSheet.create({
     lineHeight: 24, // 16 * 1.5
   },
   label: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '500',
     letterSpacing: 0.26, // 0.02em at 13px — RN letterSpacing is points, not em
   },

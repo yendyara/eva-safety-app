@@ -131,7 +131,7 @@ export default function HomeScreen() {
         <View
           style={[
             styles.setupReminder,
-            { backgroundColor: colors.surface, borderColor: colors.border },
+            { backgroundColor: colors.surface, borderColor: colors.borderDefined },
           ]}
         >
           <Text style={[Typography.body, styles.setupReminderText, { color: colors.textPrimary }]}>

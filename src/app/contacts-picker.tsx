@@ -217,7 +217,7 @@ export default function ContactsPickerScreen() {
 
           <View style={styles.matchList}>
             {matches.map(({ contact, matchedKeyword }) => (
-              <View key={contact.id} style={[styles.matchRow, { borderColor: colors.border }]}>
+              <View key={contact.id} style={[styles.matchRow, { borderColor: colors.borderSubtle }]}>
                 <View style={styles.matchText}>
                   <Text style={[Typography.body, { color: colors.textPrimary }]}>{contact.name}</Text>
                   <Text style={[Typography.label, { color: colors.textSecondary }]}>
@@ -229,7 +229,7 @@ export default function ContactsPickerScreen() {
                   onValueChange={(value) =>
                     setBlockToggles((prev) => ({ ...prev, [contact.id]: value }))
                   }
-                  trackColor={{ false: colors.border, true: colors.accent }}
+                  trackColor={{ false: colors.borderDefined, true: colors.accent }}
                 />
               </View>
             ))}
@@ -253,7 +253,7 @@ export default function ContactsPickerScreen() {
           onChangeText={setSearch}
           placeholder="Search"
           placeholderTextColor={colors.textSecondary}
-          style={[styles.searchInput, { color: colors.textPrimary, borderColor: colors.border }]}
+          style={[styles.searchInput, { color: colors.textPrimary, borderColor: colors.borderDefined }]}
         />
       </View>
 
@@ -269,7 +269,7 @@ export default function ContactsPickerScreen() {
         keyExtractor={(item) => item.id}
         stickySectionHeadersEnabled
         ListHeaderComponent={
-          <View style={[styles.pinnedRow, { borderColor: colors.border }]}>
+          <View style={[styles.pinnedRow, { borderColor: colors.borderSubtle }]}>
             <Text style={[Typography.body, { color: colors.textPrimary }]}>Emergency · {emergencyLabel}</Text>
             <Text style={[Typography.label, { color: colors.textSecondary }]}>Always available</Text>
           </View>
