@@ -31,9 +31,9 @@ export default function OnboardingFalseAlarmInfoScreen() {
             If it’s a false alarm
           </Text>
           <Text style={[Typography.body, styles.subtext, { color: colors.textSecondary }]}>
-            After an alert goes out, if you’re safe, one tap sends a
-            follow-up text telling your contacts to disregard it. No call,
-            no explanation needed in the moment.
+            If you’re safe after the alert goes out, tap once. I’ll send
+            your contacts a follow-up text telling them to ignore it. No
+            call. No explaining needed.
           </Text>
         </View>
       </View>

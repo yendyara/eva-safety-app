@@ -68,7 +68,7 @@ export default function SettingsScreen() {
             onPress={() =>
               router.push({ pathname: '/contacts-picker', params: { returnTo: '/settings' } })
             }
-            style={[Typography.body, styles.importLink, { color: colors.accent }]}
+            style={[Typography.body, styles.importLink, { color: colors.progress }]}
           >
             Import from contacts
           </Text>
@@ -89,24 +89,24 @@ export default function SettingsScreen() {
         <Section title="Trigger without opening the app" colors={colors}>
           <Text style={[Typography.body, { color: colors.textSecondary }]}>
             Back Tap lets you send an alert by tapping the back of your phone
-            twice or three times — no unlocking, no opening EVA. It works
-            through a Shortcut you set up once; here’s the fastest path.
+            twice or three times. No unlocking. No opening eva. It works
+            through a Shortcut you set up once. Here’s the fastest way.
           </Text>
           <BackTapGuide primaryLabel="Open Back Tap Settings" />
           <Text style={[Typography.body, { color: colors.textSecondary }]}>
-            Once that’s set up, you can also remove the EVA icon from your
-            Home Screen entirely: long-press the icon, choose “Remove from
-            Home Screen,” and keep it in your App Library only. EVA keeps
-            working — it just never has to be visible.
+            Once that’s set up, you can also remove the eva icon from your
+            Home Screen. Long-press the icon, choose “Remove from Home
+            Screen,” and keep it in your App Library only. I keep working. I
+            just never have to be visible.
           </Text>
         </Section>
 
         <Section title="Decoy mode" colors={colors}>
           <Text style={[Typography.body, { color: colors.textSecondary }]}>
             Off by default. If you turn it on, choosing the × on Home
-            instantly swaps EVA for a plain screen you design — your own
+            instantly swaps me for a plain screen you design. Your own
             label, icon, and color, not a pre-built theme. Triple-tap the
-            bottom-left corner of that screen to return to EVA.
+            bottom-left corner of that screen to bring me back.
           </Text>
           <DecoyEditor />
         </Section>
@@ -147,14 +147,14 @@ export default function SettingsScreen() {
 
         <Section title="About EVA" colors={colors}>
           <Text style={[Typography.body, { color: colors.textSecondary }]}>
-            EVA is named for the archetype of the original protector — Eve, the first
-            mother, the origin of protection. The app began as a concept aimed at women,
-            with fuchsia as its identity color. As the product’s scope grew to serve
-            anyone experiencing domestic abuse regardless of gender, the palette evolved
-            with it — from fuchsia into warm amber and terracotta, keeping the same
-            warmth and boldness while becoming more universal. Every choice in this app,
-            from the 3-second hold to the decoy screen, is built around one idea: a
-            steady hand in a moment that doesn’t feel steady at all.
+            I’m named for the archetype of the original protector: Eve, the first
+            mother, the origin of protection. I began as a concept aimed at women,
+            with fuchsia as my identity color. As my scope grew to serve anyone
+            experiencing domestic abuse, regardless of gender, my palette evolved
+            with it, from fuchsia into warm amber and terracotta, keeping the same
+            warmth and boldness while becoming more universal. Every part of me,
+            from the 3-second hold to the decoy screen, is built around one idea.
+            A steady hand in a moment that doesn’t feel steady at all.
           </Text>
         </Section>
       </ScrollView>
@@ -204,7 +204,7 @@ function SegmentedToggle<T extends string>({
             style={[
               styles.segmentedOption,
               {
-                borderColor: isSelected ? colors.primary : colors.borderDefined,
+                borderColor: isSelected ? colors.primary : colors.borderSubtle,
                 backgroundColor: isSelected ? colors.primary : 'transparent',
               },
             ]}

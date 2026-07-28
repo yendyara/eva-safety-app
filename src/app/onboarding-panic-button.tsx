@@ -43,8 +43,8 @@ export default function OnboardingPanicButtonScreen() {
             The panic button
           </Text>
           <Text style={[Typography.body, styles.subtext, { color: colors.textSecondary }]}>
-            Hold the button for 3 seconds to alert your trusted contacts and
-            share your location with them.
+            Hold the button for 3 seconds. I’ll alert your trusted contacts
+            and share your location with them.
           </Text>
         </View>
       </View>

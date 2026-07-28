@@ -25,10 +25,10 @@ import { AlertResult, sendSafeCancellation } from '@/utils/sendAlert';
 const EMERGENCY_NUMBERS = { EU: '112', US: '911' } as const;
 
 const STATUS_COPY: Record<AlertResult['composerResult'], string> = {
-  sent: 'Alert sent.',
-  unknown: 'Alert sent.',
-  cancelled: 'Alert not sent',
-  unavailable: 'SMS unavailable on this device',
+  sent: "I've let your contacts know you need help.",
+  unknown: "I've let your contacts know you need help.",
+  cancelled: "I didn't send your alert.",
+  unavailable: "I can't send text messages on this device.",
 };
 
 export default function AlertSentScreen() {
@@ -100,7 +100,7 @@ export default function AlertSentScreen() {
             </Text>
           ) : (
             <Text style={[Typography.label, { color: colors.textSecondary }]}>
-              Location unavailable
+              I couldn’t get your location.
             </Text>
           )}
           <Text style={[Typography.label, { color: colors.textSecondary }]}>{formattedTime}</Text>
@@ -111,11 +111,11 @@ export default function AlertSentScreen() {
         <PrimaryButton label="Call emergency services" onPress={handleCall} />
         {cancelStatus === 'sent' ? (
           <Text style={[Typography.body, { color: colors.textSecondary, textAlign: 'center' }]}>
-            Your contacts have been told you’re safe.
+            I’ve let your contacts know you’re safe.
           </Text>
         ) : (
           <TextLink
-            label={cancelStatus === 'sending' ? 'Sending…' : "I'm safe — cancel alert"}
+            label={cancelStatus === 'sending' ? 'Sending…' : "I'm safe, cancel alert"}
             onPress={handleCancelAlert}
           />
         )}

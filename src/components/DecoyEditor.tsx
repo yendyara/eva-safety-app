@@ -28,7 +28,7 @@ export function DecoyEditor() {
         <Switch
           value={decoy.enabled}
           onValueChange={(value) => update({ enabled: value })}
-          trackColor={{ false: colors.borderDefined, true: colors.accent }}
+          trackColor={{ false: colors.borderSubtle, true: colors.progress }}
         />
       </View>
 
@@ -39,7 +39,7 @@ export function DecoyEditor() {
             onChangeText={(text) => update({ label: text })}
             placeholder="Label (e.g. Notes, Tasks, Weather)"
             placeholderTextColor={colors.textSecondary}
-            style={[styles.decoyInput, { color: colors.textPrimary, borderColor: colors.borderDefined }]}
+            style={[styles.decoyInput, { color: colors.textPrimary, borderColor: colors.borderSubtle }]}
           />
 
           <View style={styles.decoyOptionRow}>
@@ -52,7 +52,7 @@ export function DecoyEditor() {
                   accessibilityRole="button"
                   style={[
                     styles.decoyIconOption,
-                    { borderColor: isSelected ? colors.primary : colors.borderDefined },
+                    { borderColor: isSelected ? colors.primary : colors.borderSubtle },
                   ]}
                 >
                   <Text style={styles.decoyIconGlyph}>{icon}</Text>
@@ -79,7 +79,7 @@ export function DecoyEditor() {
             })}
           </View>
 
-          <View style={[styles.decoyPreview, { borderColor: colors.borderDefined }]}>
+          <View style={[styles.decoyPreview, { borderColor: colors.borderSubtle }]}>
             <Text style={[styles.decoyIconGlyph, { color: decoy.color }]}>{decoy.icon}</Text>
             <Text style={[Typography.body, { color: colors.textPrimary }]}>
               {decoy.label.trim() || 'Untitled'}

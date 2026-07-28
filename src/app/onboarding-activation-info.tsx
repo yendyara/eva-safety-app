@@ -28,13 +28,13 @@ export default function OnboardingActivationInfoScreen() {
       <View style={styles.content}>
         <View style={styles.copy}>
           <Text style={[Typography.heading, styles.headline, { color: colors.textPrimary }]}>
-            You don’t have to open eva to use it
+            You don’t have to open me to use me
           </Text>
           <Text style={[Typography.body, styles.subtext, { color: colors.textSecondary }]}>
-            Double or triple tapping the back of your phone, a Siri
-            Shortcut, or hiding eva’s icon from your Home Screen entirely —
-            eva can work without ever being visibly open. Next, you’ll get
-            the chance to set any of this up.
+            Double or triple tap the back of your phone. Use a Siri
+            Shortcut. Or hide my icon from your Home Screen. I can still
+            work, even when I’m not visibly open. Next, you can set any of
+            this up.
           </Text>
         </View>
       </View>

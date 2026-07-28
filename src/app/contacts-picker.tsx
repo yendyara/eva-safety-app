@@ -210,9 +210,8 @@ export default function ContactsPickerScreen() {
             One moment
           </Text>
           <Text style={[Typography.body, { color: colors.textSecondary }]}>
-            We found some contacts that might be people close to you. Would
-            you like to make sure they don’t receive any alerts or
-            notifications from this app?
+            I found some contacts who might be close to you. Do you want to
+            make sure they never get alerts from this app?
           </Text>
 
           <View style={styles.matchList}>
@@ -229,7 +228,7 @@ export default function ContactsPickerScreen() {
                   onValueChange={(value) =>
                     setBlockToggles((prev) => ({ ...prev, [contact.id]: value }))
                   }
-                  trackColor={{ false: colors.borderDefined, true: colors.accent }}
+                  trackColor={{ false: colors.borderSubtle, true: colors.progress }}
                 />
               </View>
             ))}
@@ -253,7 +252,7 @@ export default function ContactsPickerScreen() {
           onChangeText={setSearch}
           placeholder="Search"
           placeholderTextColor={colors.textSecondary}
-          style={[styles.searchInput, { color: colors.textPrimary, borderColor: colors.borderDefined }]}
+          style={[styles.searchInput, { color: colors.textPrimary, borderColor: colors.borderSubtle }]}
         />
       </View>
 
@@ -292,7 +291,7 @@ export default function ContactsPickerScreen() {
                 <Text style={[Typography.body, { color: colors.textPrimary }]}>{item.name}</Text>
                 <Text style={[Typography.label, { color: colors.textSecondary }]}>{item.phone}</Text>
               </View>
-              <Text style={[styles.toggleGlyph, { color: isSelected ? colors.accent : colors.textSecondary }]}>
+              <Text style={[styles.toggleGlyph, { color: isSelected ? colors.progress : colors.textSecondary }]}>
                 {isSelected ? '✓' : '+'}
               </Text>
             </Pressable>
@@ -335,7 +334,7 @@ function ManualFallback({ onSave }: { onSave: (contacts: TrustedContact[]) => vo
       <TopBar onBack={() => router.back()} />
       <View style={styles.manualContent}>
         <Text style={[Typography.body, { color: colors.textSecondary }]}>
-          We couldn’t access your contacts. You can add them manually.
+          I couldn’t access your contacts. You can add them manually.
         </Text>
         <ContactForm contacts={contacts} onChange={setContacts} />
       </View>

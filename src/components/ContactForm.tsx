@@ -60,7 +60,7 @@ export function ContactForm({ contacts, onChange }: ContactFormProps) {
             onChangeText={(text) => updateContact(contact.id, 'name', text)}
             placeholder="Name"
             placeholderTextColor={colors.textSecondary}
-            style={[styles.input, { color: colors.textPrimary, borderColor: colors.borderDefined }]}
+            style={[styles.input, { color: colors.textPrimary, borderColor: colors.borderSubtle }]}
             autoCapitalize="words"
           />
           <TextInput
@@ -68,7 +68,7 @@ export function ContactForm({ contacts, onChange }: ContactFormProps) {
             onChangeText={(text) => updateContact(contact.id, 'phone', text)}
             placeholder="Phone number"
             placeholderTextColor={colors.textSecondary}
-            style={[styles.input, { color: colors.textPrimary, borderColor: colors.borderDefined }]}
+            style={[styles.input, { color: colors.textPrimary, borderColor: colors.borderSubtle }]}
             keyboardType="phone-pad"
           />
         </View>
@@ -78,7 +78,7 @@ export function ContactForm({ contacts, onChange }: ContactFormProps) {
         <Text
           accessibilityRole="button"
           onPress={addContact}
-          style={[styles.addContact, Typography.body, { color: colors.accent }]}
+          style={[styles.addContact, Typography.body, { color: colors.progress }]}
         >
           + Add contact
         </Text>

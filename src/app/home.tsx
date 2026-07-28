@@ -93,7 +93,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.topBar}>
-        <Text style={[styles.wordmark, { color: colors.primary }]}>EVA</Text>
+        <Text style={[styles.wordmark, { color: colors.primary }]}>eva</Text>
         <Pressable
           onPress={() => router.push('/settings')}
           accessibilityRole="button"
@@ -120,7 +120,7 @@ export default function HomeScreen() {
         <Pressable
           onPress={() => router.replace('/decoy')}
           accessibilityRole="button"
-          accessibilityLabel="Hide EVA"
+          accessibilityLabel="Hide eva"
           style={styles.decoyTrigger}
         >
           <Text style={[styles.decoyGlyph, { color: colors.textSecondary }]}>×</Text>
@@ -131,11 +131,11 @@ export default function HomeScreen() {
         <View
           style={[
             styles.setupReminder,
-            { backgroundColor: colors.surface, borderColor: colors.borderDefined },
+            { backgroundColor: colors.card, borderColor: colors.borderSubtle },
           ]}
         >
           <Text style={[Typography.body, styles.setupReminderText, { color: colors.textPrimary }]}>
-            Want to finish setting up your account?
+            Want to finish setting things up?
           </Text>
           <PrimaryButton label="Continue setup" onPress={handleContinueSetup} />
           <TextLink label="Not now" onPress={handleDismissSetupReminder} colorToken="textSecondary" />
@@ -145,7 +145,11 @@ export default function HomeScreen() {
   );
 }
 
-/** A minimal gear glyph built from Text — avoids pulling in an icon library for one icon. */
+/**
+ * A minimal gear glyph built from Text — avoids pulling in an icon library
+ * for one icon. When a real icon set is introduced, this should follow the
+ * design-system spec's rounded outline style, 1.5px stroke.
+ */
 function SettingsGlyph({ color }: { color: string }) {
   return <Text style={{ color, fontSize: 20 }}>⚙</Text>;
 }
@@ -194,7 +198,7 @@ const styles = StyleSheet.create({
     // so the two never overlap when decoy mode is also enabled.
     bottom: Spacing.xxl + Spacing.lg,
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 20,
+    borderRadius: 12,
     padding: Spacing.lg,
     gap: Spacing.md,
     alignItems: 'center',

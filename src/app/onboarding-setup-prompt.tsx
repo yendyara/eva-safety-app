@@ -37,11 +37,11 @@ export default function OnboardingSetupPromptScreen() {
       <View style={styles.content}>
         <View style={styles.copy}>
           <Text style={[Typography.heading, styles.headline, { color: colors.textPrimary }]}>
-            Ready to set up your account?
+            Ready to set things up?
           </Text>
           <Text style={[Typography.body, styles.subtext, { color: colors.textSecondary }]}>
-            Add trusted contacts, choose how alerts trigger, and set up
-            Back Tap — or come back to it whenever you're ready.
+            Add trusted contacts, choose how to trigger an alert, and set up
+            Back Tap. Or come back to this whenever you’re ready.
           </Text>
         </View>
       </View>

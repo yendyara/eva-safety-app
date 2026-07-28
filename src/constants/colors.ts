@@ -6,21 +6,27 @@
  * anyone experiencing domestic abuse — same warmth and boldness, deeper and
  * more universal.
  *
- * Each token has one job, not a vibe:
- * - primary: the brown that carries every main action, including the panic
- *   button itself.
- * - accent ("Progress / links"): terracotta, used for progress indicators
- *   (the hold-to-trigger arc, the breathing animation) and tappable links.
- * - highlight ("Alerts / urgency"): amber, reserved for moments that need
- *   genuine attention. Deliberately distinct from accent so a real urgent
- *   state never has to borrow a color that already means "in progress."
- * - borderSubtle vs borderDefined: hairlines and section separators use the
- *   softer subtle tone; anything with an actual visible boundary — card
- *   outlines, input fields, selectable options — uses the more defined one.
- * - positive ("safe / confirmed") and negative ("destructive"): a sage-
- *   adjacent green and a burnt orange, for the rare cases that need to read
- *   unambiguously as "good" or "undo-this-carefully" — a confirmed-safe
- *   state, a "Remove contact" action.
+ * Three-tier urgency escalation — always in this order, never skipped or
+ * reordered:
+ * - amber (`primary`): tier 1, calm / default action. Every primary button,
+ *   the wordmark, the brand color at rest.
+ * - terracotta (`progress`, "Progress / links"): tier 2, alert sent /
+ *   elevated. Progress indicators (the hold-to-trigger arc's base, the
+ *   breathing exhale), tappable links.
+ * - saffron (`alert`, "Alerts / urgency"): tier 3, active emergency. Not yet
+ *   wired into any screen, but kept distinct so a genuinely urgent state
+ *   never has to borrow a color that already means "in progress."
+ *
+ * borderSubtle vs borderDefined: borderSubtle is the default hairline
+ * (dividers, section separators, input outlines, card outlines) — nearly
+ * everything. borderDefined is reserved for emphasis, specifically the
+ * secondary button's border, which needs to read as a deliberate outline
+ * rather than a passive hairline.
+ *
+ * positive ("safe / confirmed") and negative ("destructive"): a forest
+ * green and a burnt orange, for the rare cases that need to read
+ * unambiguously as "good" or "undo-this-carefully" — a confirmed-safe
+ * state, a "Remove contact" action.
  *
  * Nothing in this app uses actual red — red reads as alarm and amplifies
  * panic in a user who is already in a high-stress state. `negative` stays
@@ -32,11 +38,11 @@
 export type ThemeTokens = {
   background: string;
   primary: string;
-  accent: string;
-  highlight: string;
+  progress: string;
+  alert: string;
   textPrimary: string;
   textSecondary: string;
-  surface: string;
+  card: string;
   borderSubtle: string;
   borderDefined: string;
   positive: string;
@@ -48,11 +54,11 @@ export type ThemeTokens = {
 export const LightColors: ThemeTokens = {
   background: '#FAF7F4',
   primary: '#8B5E3C',
-  accent: '#C4603A',
-  highlight: '#E8A020',
+  progress: '#C4603A',
+  alert: '#E8A020',
   textPrimary: '#1A1A1A',
   textSecondary: '#6B6B6B',
-  surface: '#FFFFFF',
+  card: '#FFFFFF',
   borderSubtle: '#E8E0D8',
   borderDefined: '#C4BAB0',
   positive: '#3D7A4A',
@@ -65,11 +71,11 @@ export const DarkColors: ThemeTokens = {
   // Amber and terracotta carry over unchanged in dark mode — the identity
   // color shouldn't shift with the system theme, only the neutrals around it.
   primary: '#8B5E3C',
-  accent: '#C4603A',
-  highlight: '#E8A020',
+  progress: '#C4603A',
+  alert: '#E8A020',
   textPrimary: '#F5F0EB',
   textSecondary: '#9E9E9E',
-  surface: '#1C1C1C',
+  card: '#1C1C1C',
   borderSubtle: '#2A2A2A',
   // Same defined-border tone as light mode — it's already dark/neutral
   // enough to read clearly against the dark surface without adjustment.

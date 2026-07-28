@@ -34,7 +34,7 @@ export default function OnboardingReadyScreen() {
           You’re all set.
         </Text>
         <Text style={[Typography.body, styles.subtext, { color: colors.textSecondary }]}>
-          eva is ready to be by your side.
+          I’m ready to be by your side.
         </Text>
       </View>
 

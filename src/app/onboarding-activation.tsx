@@ -25,7 +25,7 @@ const OPTIONS: { value: ActivationMethod; label: string; description: string }[]
   {
     value: 'hold',
     label: 'On-screen button',
-    description: 'Hold the eva button for 3 seconds.',
+    description: 'Hold the button for 3 seconds.',
   },
   {
     value: 'volume',
@@ -71,8 +71,8 @@ export default function OnboardingActivationScreen() {
                 style={[
                   styles.option,
                   {
-                    borderColor: isSelected ? colors.primary : colors.borderDefined,
-                    backgroundColor: isSelected ? colors.primary : colors.surface,
+                    borderColor: isSelected ? colors.primary : colors.borderSubtle,
+                    backgroundColor: isSelected ? colors.primary : colors.card,
                   },
                 ]}
               >

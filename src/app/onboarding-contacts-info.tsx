@@ -27,12 +27,12 @@ export default function OnboardingContactsInfoScreen() {
       <View style={styles.content}>
         <View style={styles.copy}>
           <Text style={[Typography.heading, styles.headline, { color: colors.textPrimary }]}>
-            Who eva alerts
+            Who I alert
           </Text>
           <Text style={[Typography.body, styles.subtext, { color: colors.textSecondary }]}>
-            Up to 3 trusted people — a partner, a sibling, a close friend.
-            When you trigger eva, they instantly get a text with your
-            location, so they can reach you or call for help on your behalf.
+            Up to 3 trusted people: a partner, a sibling, a close friend.
+            When you trigger me, I text them right away with your location.
+            They can reach you or call for help.
           </Text>
         </View>
       </View>

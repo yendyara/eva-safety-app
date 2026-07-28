@@ -31,11 +31,11 @@ export default function OnboardingDecoyScreen() {
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.copy}>
           <Text style={[Typography.heading, styles.headline, { color: colors.textPrimary }]}>
-            Disguise eva (optional)
+            Disguise me (optional)
           </Text>
           <Text style={[Typography.body, styles.subtext, { color: colors.textSecondary }]}>
-            If you turn this on, the × on Home swaps eva for a plain screen
-            you design — your own label, icon, and color, not a pre-built
+            If you turn this on, the × on Home swaps me for a plain screen
+            you design. Your own label, icon, and color, not a pre-built
             theme. Off by default.
           </Text>
         </View>

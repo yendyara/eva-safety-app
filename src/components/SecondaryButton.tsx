@@ -1,11 +1,7 @@
 /**
- * The one primary action per screen: full-width, amber, rounded.
- *
- * Deliberately not reused for anything urgent or destructive — amber is
- * the "do the main thing" color across EVA (Get started, I'm ready, Call
- * emergency services), while terracotta is reserved for moments that need
- * attention. Keeping that split consistent is what lets color alone carry
- * meaning without the user having to read every label under stress.
+ * The secondary action alongside a PrimaryButton: card fill, a defined
+ * (not hairline) border, primary-colored text — enough presence to read as
+ * a real button, without competing with the one primary action per screen.
  */
 import React from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
@@ -13,13 +9,13 @@ import { Pressable, StyleSheet, Text } from 'react-native';
 import { MIN_TAP_TARGET, Spacing } from '@/constants/spacing';
 import { useAppTheme } from '@/utils/colorSystem';
 
-type PrimaryButtonProps = {
+type SecondaryButtonProps = {
   label: string;
   onPress: () => void;
   disabled?: boolean;
 };
 
-export function PrimaryButton({ label, onPress, disabled }: PrimaryButtonProps) {
+export function SecondaryButton({ label, onPress, disabled }: SecondaryButtonProps) {
   const { colors } = useAppTheme();
 
   return (
@@ -29,10 +25,10 @@ export function PrimaryButton({ label, onPress, disabled }: PrimaryButtonProps) 
       accessibilityRole="button"
       style={[
         styles.button,
-        { backgroundColor: colors.primary, opacity: disabled ? 0.5 : 1 },
+        { backgroundColor: colors.card, borderColor: colors.borderDefined, opacity: disabled ? 0.5 : 1 },
       ]}
     >
-      <Text style={[styles.label, { color: colors.onPrimary }]}>{label}</Text>
+      <Text style={[styles.label, { color: colors.primary }]}>{label}</Text>
     </Pressable>
   );
 }
@@ -40,6 +36,7 @@ export function PrimaryButton({ label, onPress, disabled }: PrimaryButtonProps) 
 const styles = StyleSheet.create({
   button: {
     minHeight: MIN_TAP_TARGET,
+    borderWidth: 1,
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',

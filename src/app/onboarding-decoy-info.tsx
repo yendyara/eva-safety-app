@@ -29,15 +29,15 @@ export default function OnboardingDecoyInfoScreen() {
       <View style={styles.content}>
         <View style={styles.copy}>
           <Text style={[Typography.heading, styles.headline, { color: colors.textPrimary }]}>
-            eva can disguise itself, too
+            I can disguise myself, too
           </Text>
           <Text style={[Typography.body, styles.subtext, { color: colors.textSecondary }]}>
-            Turn this on later and eva can look like a plain notes app
-            instead — nothing about it hints at what’s underneath. Three
-            quick taps in the bottom-left corner bring eva back whenever
-            you’re ready. Holding that same spot for 3 seconds — same as
-            the panic button — sends the alert right away, without ever
-            revealing eva first.
+            Turn this on later, and I can look like a plain notes app
+            instead. Nothing about it hints at what’s underneath. Tap the
+            bottom-left corner three times to bring me back whenever you’re
+            ready. Hold that same spot for 3 seconds, just like the panic
+            button, and I’ll send the alert right away. You never have to
+            reveal me first.
           </Text>
         </View>
       </View>

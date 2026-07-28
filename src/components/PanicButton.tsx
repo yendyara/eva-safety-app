@@ -11,9 +11,14 @@
  * balance point — short enough to complete while genuinely panicking, long
  * enough that an accidental brush won't complete it.
  *
- * The terracotta arc filling in around the button is the only feedback
- * during the hold. It answers "is this working?" without needing text,
- * which matters because reading comprehension also narrows under stress.
+ * The button itself is always full-saturation terracotta (`progress`) —
+ * never a pale tint, never muted for the theme — the one component in the
+ * app allowed to be visually loud, since everything else stays quiet. The
+ * saffron (`alert`) arc filling in around it is the only feedback during
+ * the hold: tier 2 (terracotta, "about to alert") escalating to tier 3
+ * (saffron, "active emergency") as the hold completes. It answers "is this
+ * working?" without needing text, which matters because reading
+ * comprehension also narrows under stress.
  */
 import React, { useRef, useState } from 'react';
 import { Animated, Easing, GestureResponderEvent, Pressable, StyleSheet, Text, View } from 'react-native';
@@ -91,7 +96,7 @@ export function PanicButton({ onTrigger }: PanicButtonProps) {
       <View
         style={[
           styles.buttonBase,
-          { backgroundColor: colors.primary },
+          { backgroundColor: colors.progress },
           // A slight scale-down while held gives immediate tactile
           // confirmation that the press registered, independent of the arc.
           isHolding && styles.buttonBasePressed,
@@ -113,7 +118,7 @@ export function PanicButton({ onTrigger }: PanicButtonProps) {
           cx={BUTTON_DIAMETER / 2}
           cy={BUTTON_DIAMETER / 2}
           r={radius}
-          stroke={colors.accent}
+          stroke={colors.alert}
           strokeWidth={STROKE_WIDTH}
           strokeLinecap="round"
           strokeDasharray={circumference}

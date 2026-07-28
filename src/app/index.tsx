@@ -61,7 +61,7 @@ export default function WelcomeScreen() {
             always with you
           </Text>
           <Text style={[Typography.body, styles.subtext, { color: colors.textSecondary }]}>
-            eva is designed to help you get help quickly and discreetly in an
+            I’m here to help you get help quickly and discreetly in an
             emergency.
           </Text>
         </View>

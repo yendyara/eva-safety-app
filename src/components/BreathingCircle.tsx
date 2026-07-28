@@ -105,7 +105,7 @@ export function BreathingCircle() {
   });
   const borderColor = strokeProgress.interpolate({
     inputRange: [0, 1],
-    outputRange: [colors.primary, colors.accent],
+    outputRange: [colors.primary, colors.progress],
   });
 
   return (

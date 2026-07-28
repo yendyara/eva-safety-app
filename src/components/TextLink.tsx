@@ -14,11 +14,11 @@ import { useAppTheme } from '@/utils/colorSystem';
 type TextLinkProps = {
   label: string;
   onPress: () => void;
-  /** Defaults to accent (terracotta) — pass 'textSecondary' for lower-emphasis links. */
+  /** Defaults to progress (terracotta) — pass 'textSecondary' for lower-emphasis links. */
   colorToken?: ColorToken;
 };
 
-export function TextLink({ label, onPress, colorToken = 'accent' }: TextLinkProps) {
+export function TextLink({ label, onPress, colorToken = 'progress' }: TextLinkProps) {
   const { colors } = useAppTheme();
 
   return (
