@@ -24,15 +24,17 @@
  * rather than a passive hairline.
  *
  * positive ("safe / confirmed") and negative ("destructive"): a forest
- * green and a burnt orange, for the rare cases that need to read
- * unambiguously as "good" or "undo-this-carefully" — a confirmed-safe
- * state, a "Remove contact" action.
+ * green and a dark, desaturated red-orange, for the rare cases that need
+ * to read unambiguously as "good" or "undo-this-carefully" — a
+ * confirmed-safe state, a "Remove contact" action.
  *
  * Nothing in this app uses actual red — red reads as alarm and amplifies
- * panic in a user who is already in a high-stress state. `negative` stays
- * in the same warm-orange family as the rest of the palette (closer to
- * terracotta than to red) specifically so a destructive action still reads
- * as "this app" rather than triggering that alarm response.
+ * panic in a user who is already in a high-stress state. `negative` is a
+ * deliberate exception worth calling out: at ~8° hue it sits closer to true
+ * red than the rest of the palette (terracotta is ~15-17°, primary ~26°) —
+ * closer than is comfortable on paper. What keeps it out of alarm territory
+ * is that it's dark and desaturated rather than bright and saturated. Don't
+ * lighten or saturate it further without re-checking against the no-red rule.
  */
 
 export type ThemeTokens = {
@@ -62,7 +64,7 @@ export const LightColors: ThemeTokens = {
   borderSubtle: '#E8E0D8',
   borderDefined: '#C4BAB0',
   positive: '#3D7A4A',
-  negative: '#C45C2A',
+  negative: '#5C1206',
   onPrimary: '#FFF8F2',
 };
 
@@ -83,7 +85,7 @@ export const DarkColors: ThemeTokens = {
   // Lighter/more vivid than the light-mode values — both need the extra
   // luminance to hold their weight and stay legible against a dark surface.
   positive: '#6AAF7A',
-  negative: '#E06B35',
+  negative: '#D1451F',
   onPrimary: '#FFF8F2',
 };
 
