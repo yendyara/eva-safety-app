@@ -19,10 +19,20 @@ import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts, Inter_600SemiBold, Inter_800ExtraBold } from '@expo-google-fonts/inter';
 import { useEffect } from 'react';
+import { Platform, StyleSheet, View } from 'react-native';
 
 import { AppThemeProvider, useAppTheme } from '@/utils/colorSystem';
 
 SplashScreen.preventAutoHideAsync();
+
+/**
+ * On web the window can be far wider than any phone, and a full-bleed layout
+ * leaves the panic button and copy stranded in a sea of whitespace. Cap the
+ * app at roughly a 10" iPad's portrait width and centre it, with a muted
+ * backdrop framing the column on anything wider. Native is untouched — the
+ * cap is inert there since no device is this wide.
+ */
+const MAX_CONTENT_WIDTH = 820;
 
 function RootNavigator() {
   const { colors, scheme, isLoaded } = useAppTheme();
@@ -39,19 +49,46 @@ function RootNavigator() {
     return null;
   }
 
+  const stack = (
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        animation: 'fade',
+        contentStyle: { backgroundColor: colors.background },
+      }}
+    />
+  );
+
   return (
     <>
       <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          animation: 'fade',
-          contentStyle: { backgroundColor: colors.background },
-        }}
-      />
+      {Platform.OS === 'web' ? (
+        <View
+          style={[
+            styles.webBackdrop,
+            { backgroundColor: scheme === 'dark' ? '#000000' : '#EFEAE4' },
+          ]}
+        >
+          <View style={[styles.webFrame, { backgroundColor: colors.background }]}>{stack}</View>
+        </View>
+      ) : (
+        stack
+      )}
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  webBackdrop: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  webFrame: {
+    flex: 1,
+    width: '100%',
+    maxWidth: MAX_CONTENT_WIDTH,
+  },
+});
 
 export default function RootLayout() {
   return (
